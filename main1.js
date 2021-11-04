@@ -1,23 +1,3 @@
-const getVector = ({x, y}) => {
-    if (x > y) {
-        if (Math.abs(x / y) < 0.5) return;
-        return 8;
-    } else {
-        if (Math.abs(y / x) < 0.5) return;
-        return 2;
-    }
-};
-
-
-var VECTOR_NAME = [];
-let v = getVector( {x: 3, y: 2});
-VECTOR_NAME.push(v);
-console.log(VECTOR_NAME.indexOf(v));
-/* if (v && VECTOR_NAME.indexOf(v) !== -1) {
- 
-} */
-
-
 
 
  const getVector = ({x, y}) => {
