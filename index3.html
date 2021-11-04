@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <!-- Compiled and minified CSS -->
+      <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
+      <link rel="stylesheet" href="output.css">
+      <!-- Compiled and minified JavaScript -->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <script
+  src="https://code.jquery.com/jquery-2.2.4.min.js"
+  integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+  crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        .danger {
+            padding: 5px;
+            background-color: #ff6347;
+            color: #fff;
+        }
+
+    </style>
+</head>
+<body>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.chips');
+    var instances = M.AutoInit();
+  });
+      </script>
+<div id="app">
+    <calc></calc>
+</div>
+<template id="calc-tpl">
+    <div>
+
+      <div class="row">
+        <div class="col s12 m5">
+          <div class="card-panel">
+           
+
+           
+            <label>Materialize Select</label>
+            <label>Browser Select</label>
+            <select class="browser-default" v-model="srcCountry" v-on:change="getPrice" >
+              <option value="" disabled selected>Choose your option</option>
+
+              <option v-for="(item, i) in country" :key="i">
+                {{item}} ({{i}})
+              </option>
+            </select>
+
+           
+
+            <label>Browser Select</label>
+            <select class="browser-default" v-model="desCountry" v-on:change="getPrice">
+              <option value="" disabled selected>Choose your option</option>
+              <option v-for="(item, i) in country" :key="i">
+                {{item}} ({{i}})
+              </option>
+            </select>
+
+            <p>
+              <label>
+                <input type="checkbox" class="filled-in "  checked="checked" />
+                <span>Прямое соединение</span>
+              </label>
+            </p>
+
+            <p>
+              <label>
+                <input type="checkbox" class="filled-in" checked="checked" />
+                <span>Один дополнительный узер</span>
+              </label>
+            </p>
+
+            <p>
+              <label>
+                <input type="checkbox" class="filled-in" checked="checked" />
+                <span>Все</span>
+              </label>
+            </p>
+
+          </div>
+        </div>
+        <div class="col s12 m5">
+
+
+        <div v-for="(item, i) in items" :key="i" class="card-panel" style="display: flex; justify-content: space-between;">
+          <div style=""><a class="btn-floating btn-large waves-light orange"> {{item[0]['price']}} $</a></div>
+
+        <div >
+          <a class=" waves-light btn-small disabled">{{item[0]['src']}} </a>
+          <i class="material-icons" style="position: relative; top:7px"> arrow_forward</i>
+          <div class="chip orange">{{item[1]}} </div>
+          <i class="material-icons" style="position: relative; top:7px">arrow_forward</i>
+          <a class=" waves-light btn-small disabled">{{item[0]['des']}}</a>
+        </div>
+
+
+      </div>
+
+        <ul class="pagination">
+    
+          <li v-for="(item, i) in pages[0]" :key="i" v-bind:class="{'active orange': pages[1]}"><a href="#!">{{i+1}}</a></li>
+
+        
+        </ul>
+        </div>
+
+      </div>
+
+
+
+{{country}}
+
+{{items}}
+
+<!-- 
+        <ul>
+            <li v-for="(item, i) in items" :key="i">
+                {{item.name}}, остаток: {{item.rest}}
+            </li>
+        </ul>
+        <p class="danger">Остаток на складе: {{count}}</p>
+        <p>
+            <button @click="deleteItem">Удалить товар с нулевым остатком на складе</button>
+        </p>
+        <div v-if="deleted.length > 0">
+            <p>Удаленно товаров:</p>
+            <ul>
+                <li v-for="item in deleted">
+                    {{item.n}} остаток {{item.rest}}
+                </li>
+            </ul>
+        </div>
+        <p v-else>Ничего не удалено</p>
+    </div> -->
+</template>
+
+
+<script>
+    $(".active").css("color", "blue" );
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.12/vue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
+
+<script>
+
+  Vue.component('calc', {
+    template: '#calc-tpl',
+    data () {
+      return {
+
+        data: {
+    "company": {
+      "waterTel": [
+        {
+          "src": "kz",
+          "des": "usa",
+          "price": 9
+        },
+        {
+          "src": "kz",
+          "des": "de",
+          "price": 14
+        },
+        {
+          "src": "usa",
+          "des": "de",
+          "price": 22
+        },
+        {
+          "src": "ru",
+          "des": "de",
+          "price": 10
+        },
+        {
+          "src": "ru",
+          "des": "kz",
+          "price": 31
+        },
+        {
+          "src": "ru",
+          "des": "usa",
+          "price": 22
+        }
+      ],
+      "airTel": [
+        {
+          "src": "kz",
+          "des": "usa",
+          "price": 11
+        },
+        {
+          "src": "kz",
+          "des": "de",
+          "price": 8
+        },
+        {
+          "src": "usa",
+          "des": "de",
+          "price": 16
+        },
+        {
+          "src": "ru",
+          "des": "de",
+          "price": 25
+        },
+        {
+          "src": "ru",
+          "des": "kz",
+          "price": 26
+        },
+        {
+          "src": "ru",
+          "des": "usa",
+          "price": 17
+        }
+      ],
+      "earthTel": [
+        {
+          "src": "kz",
+          "des": "usa",
+          "price": 17
+        },
+        {
+          "src": "kz",
+          "des": "de",
+          "price": 13
+        },
+        {
+          "src": "usa",
+          "des": "de",
+          "price": 19
+        },
+        {
+          "src": "ru",
+          "des": "de",
+          "price": 21
+        },
+        {
+          "src": "ru",
+          "des": "kz",
+          "price": 21
+        },
+        {
+          "src": "ru",
+          "des": "usa",
+          "price": 24
+        }
+      ],
+      "fireTel": [
+        {
+          "src": "kz",
+          "des": "usa",
+          "price": 23
+        },
+        {
+          "src": "kz",
+          "des": "de",
+          "price": 17
+        },
+        {
+          "src": "usa",
+          "des": "de",
+          "price": 21
+        },
+        {
+          "src": "ru",
+          "des": "de",
+          "price": 7
+        },
+        {
+          "src": "ru",
+          "des": "kz",
+          "price": 19
+        },
+        {
+          "src": "ru",
+          "des": "usa",
+          "price": 30
+        }
+      ]
+    },
+    "country": {
+      "ru": "Россия",
+      "kz": "Казахстан",
+      "de": "Германия",
+      "usa": "США"
+    },
+
+  },
+  desCountry: "",
+    srcCountry: "",
+        items: [],
+        pages: "",
+        country: []
+      }
+    },
+    computed: {
+
+    },
+      created() {
+        this.country = this.data['country'];
+
+    },
+    methods: {
+
+      getCountryPreffix (str1) {
+      var mySubString = str1.substring(
+    str1.lastIndexOf("(") + 1, 
+    str1.lastIndexOf(")")
+    );
+    return mySubString;
+    },
+
+      deleteItem () {
+        this.deleted = _.remove(this.items, function (el) {
+          return el.rest === 0
+        })
+  
+      },
+
+
+    getPrice() {
+      let P1 = this.data['company'];
+      const arr = Object.keys( P1).map((key) => [key,  P1[key]]); // json to array
+      //console.log(arr);
+      var newArr = [];
+
+      arr.forEach(function(item, i, arr) { 
+        
+      })
+      var src = this.getCountryPreffix(this.srcCountry);
+      var des = this.getCountryPreffix(this.desCountry);
+      newArr = arr.map(function(item, i, arr) {   
+      var item0 = item[0];
+      var item1 = item[1].filter( function(items) {
+        if (items['src'] == src && items['des'] == des ) {
+          return true
+        }
+       
+      });
+
+      var itemTotal;
+      console.log(item1.length);
+      if (item1.length) {  
+        itemTotal = item1.concat(item0);
+      } else {
+        itemTotal = "0";
+      }
+     
+
+    
+    return itemTotal;
+      
+      
+    });
+
+    var newArr1 = newArr.filter(function(item) {
+      return item[0] != 0;
+    })
+
+    newArr1.sort(function(a, b) {
+    return a[0]["price"] - b[0]["price"];
+    });
+    this.items = newArr1;
+
+    console.log(newArr1);
+
+      },
+
+      getPagination() {
+        console.log(this.items.length/2);
+        var pagesCount = this.items.length/2;
+        var myclass = "active";
+        var activePage = 1; 
+        for(var i = 0; i<= pagesCount ; i++) {
+          this.pages += ({activePage, myclass })
+        }
+
+        console.log(this.pages);
+
+        
+      },
+ 
+      getPrice2() {
+      let P1 = this.data['company'];
+      const arr = Object.keys( P1).map((key) => [key,  P1[key]]); // json to array
+      //console.log(arr);
+      var newArr = [];
+
+      arr.forEach(function(item, i, arr) { 
+        
+      })
+      var src = this.getCountryPreffix(this.srcCountry);
+      var des = this.getCountryPreffix(this.desCountry);
+
+
+      newArr = arr.map(function(item, i, arr) {   
+      var item0 = item[0];
+      var item1 = item[1].filter( function(items) {
+        if (items['src'] == src && items['des'] == des ) {
+          return true
+        }
+       
+      })
+
+
+    
+      
+      
+      
+
+      var itemTotal;
+      console.log(item1.length);
+      if (item1.length) {  
+        itemTotal = item1.concat(item0);
+      } else {
+        itemTotal = "0";
+      }
+     
+
+    
+    return itemTotal;
+      
+      
+    });
+
+    var nArr = [];
+    var src01, des01, des02;
+
+    src01 =  arr.map(function(item, i, arr) { 
+      return item[1].filter(function(item, i, arr) {
+        if (item['src'] == "kz") {
+          return item;
+        }
+        });
+    });
+
+    des02 =  arr.map(function(item, i, arr) { 
+      return item[1].filter(function(item, i, arr) {
+        if (item['des'] == "usa") {
+          return item;
+        }
+        });
+    });
+
+
+
+    console.log(des02);
+
+
+
+   
+
+
+
+      },
+
+
+
+/*       let newArr = arr[0][1].filter( function(item) {
+        if (item['src'] == "kz" && item['des'] == "usa" ) {
+          return true;
+        }
+       
+      });
+      
+    } */
+    },
+
+
+  })
+  new Vue({
+    el: '#app'
+  })
+</script>
+</body>
+</html>
